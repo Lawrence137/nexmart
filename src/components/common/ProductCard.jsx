@@ -1,54 +1,77 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
-  const { id, name, price, image, category, discount } = product;
-
   return (
-    <div className="group relative bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <div className="group relative bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       {/* Product Image */}
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative pt-[100%] w-full">
         <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          src={product.image}
+          alt={product.name}
+          className="absolute inset-0 h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
         />
-        {discount && (
-          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
-            -{discount}%
+        {product.discount && (
+          <div className="absolute top-4 left-4">
+            <span className="inline-flex items-center rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white">
+              {product.discount}% OFF
+            </span>
           </div>
         )}
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
-        <Link to={`/products/${id}`} className="block">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1 hover:text-blue-600 transition-colors">
-            {name}
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex-1">
+          <p className="text-sm text-gray-500 mb-1">{product.category}</p>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+            {product.name}
           </h3>
-        </Link>
-        <p className="text-sm text-gray-500 mb-2">{category}</p>
-        
-        {/* Price and Add to Cart */}
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-blue-600">${price}</span>
-            {discount && (
-              <span className="text-sm text-gray-500 line-through">
-                ${(price * (1 + discount / 100)).toFixed(2)}
-              </span>
+          <div className="flex items-end gap-2 mb-4">
+            <p className="text-2xl font-bold text-gray-900">
+              ${product.price.toFixed(2)}
+            </p>
+            {product.discount && (
+              <p className="text-sm text-gray-500 line-through">
+                ${(product.price * (1 + product.discount / 100)).toFixed(2)}
+              </p>
             )}
           </div>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center space-x-1">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span>Add</span>
-          </button>
         </div>
+
+        <Link
+          to={`/products/${product.id}`}
+          className="group/btn relative inline-flex w-full items-center justify-center overflow-hidden rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+        >
+          View Details
+          <svg
+            className="ml-2 h-4 w-4 transform transition-transform group-hover/btn:translate-x-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </Link>
       </div>
     </div>
   );
+};
+
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    discount: PropTypes.number,
+  }).isRequired,
 };
 
 export default ProductCard; 
