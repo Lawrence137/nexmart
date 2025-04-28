@@ -4,6 +4,8 @@ import Footer from '../../components/layout/Footer';
 import ProductCard from '../../components/common/ProductCard';
 import CategoryCard from '../../components/common/CategoryCard';
 import Hero from '../../components/sections/Hero';
+import FeaturedCollections from '../../components/sections/FeaturedCollections';
+import TrendingNow from '../../components/sections/TrendingNow';
 
 const Home = () => {
   const categories = [
@@ -75,6 +77,8 @@ const Home = () => {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <Hero />
+      <TrendingNow />
+      <FeaturedCollections />
       
       {/* Categories Section */}
       <section className="py-16 sm:py-24">
