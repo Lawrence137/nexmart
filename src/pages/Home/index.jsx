@@ -6,8 +6,14 @@ import CategoryCard from '../../components/common/CategoryCard';
 import Hero from '../../components/sections/Hero';
 import FeaturedCollections from '../../components/sections/FeaturedCollections';
 import TrendingNow from '../../components/sections/TrendingNow';
+import FlashDeals from '../../components/sections/FlashDeals';
+import RecentlyViewed from '../../components/sections/RecentlyViewed';
+import { useState } from 'react';
+import QuickShopModal from '../../components/common/QuickShopModal';
 
 const Home = () => {
+  const [quickShopProduct, setQuickShopProduct] = useState(null);
+  
   const categories = [
     {
       id: 1,
@@ -78,6 +84,7 @@ const Home = () => {
       <Header />
       <Hero />
       <TrendingNow />
+      <FlashDeals />
       <FeaturedCollections />
       
       {/* Categories Section */}
@@ -119,6 +126,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <RecentlyViewed />
 
       {/* Special Offers Section */}
       <section className="py-16 sm:py-24 bg-gray-50">
@@ -203,6 +212,12 @@ const Home = () => {
       </section>
 
       <Footer />
+
+      <QuickShopModal
+        isOpen={!!quickShopProduct}
+        onClose={() => setQuickShopProduct(null)}
+        product={quickShopProduct}
+      />
     </div>
   );
 };
