@@ -1,37 +1,44 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import MobileMenu from './MobileMenu';
+
+// Animation for header entrance
+const headerVariants = {
+  hidden: { opacity: 0, y: -50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+};
+
+// Hover animation for navigation links and buttons
+const linkVariants = {
+  hover: {
+    y: -2,
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+};
+
+// Hamburger to X animation variants
+const topLineVariants = {
+  closed: { rotate: 0, y: 0 },
+  open: { rotate: 45, y: 6 },
+};
+
+const middleLineVariants = {
+  closed: { opacity: 1 },
+  open: { opacity: 0 },
+};
+
+const bottomLineVariants = {
+  closed: { rotate: 0, y: 0 },
+  open: { rotate: -45, y: -6 },
+};
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Animation for header entrance
-  const headerVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
-    },
-  };
-
-  // Hover animation for navigation links and buttons
-  const linkVariants = {
-    hover: {
-      y: -2,
-      transition: { duration: 0.3, ease: 'easeOut' },
-    },
-  };
-
-  // Animation for mobile menu
-  const mobileMenuVariants = {
-    hidden: { opacity: 0, height: 0 },
-    visible: {
-      opacity: 1,
-      height: 'auto',
-      transition: { duration: 0.3, ease: 'easeOut' },
-    },
-  };
 
   return (
     <motion.header
@@ -81,12 +88,12 @@ const Header = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <motion.div whileHover="hover" variants={linkVariants}>
-              <Link to="/categories" className="hover:text-orange-300 drop-shadow-md transition-colors">
+              <Link to="/categories" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
                 Categories
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={linkVariants}>
-              <Link to="/deals" className="hover:text-orange-300 drop-shadow-md transition-colors">
+              <Link to="/deals" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
                 Deals
               </Link>
             </motion.div>
@@ -111,14 +118,14 @@ const Header = () => {
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={linkVariants}>
-              <Link to="/auth/login" className="hover:text-orange-300 drop-shadow-md transition-colors">
+              <Link to="/auth/login" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
                 Login
               </Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }}>
               <Link
                 to="/auth/register"
-                className="bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-2 rounded-full hover:from-orange-600 hover:to-rose-600 shadow-md transition-all duration-300"
+                className="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-4 py-2 rounded-full hover:from-orange-600 hover:to-rose-600 shadow-md transition-all duration-300"
               >
                 Sign Up
               </Link>
@@ -129,53 +136,46 @@ const Header = () => {
           <div className="md:hidden">
             <motion.button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-orange-300"
+              className="text-blue-900 hover:text-orange-300" // Changed to a contrasting navy color
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                <motion.path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16"
+                  variants={topLineVariants}
+                  initial="closed"
+                  animate={isMenuOpen ? 'open' : 'closed'}
+                />
+                <motion.path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 12h16"
+                  variants={middleLineVariants}
+                  initial="closed"
+                  animate={isMenuOpen ? 'open' : 'closed'}
+                />
+                <motion.path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 18h16"
+                  variants={bottomLineVariants}
+                  initial="closed"
+                  animate={isMenuOpen ? 'open' : 'closed'}
+                />
               </svg>
             </motion.button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <motion.div
-        variants={mobileMenuVariants}
-        initial="hidden"
-        animate={isMenuOpen ? 'visible' : 'hidden'}
-        className="md:hidden bg-gradient-to-r from-amber-50/90 via-orange-100/90 to-rose-200/90 backdrop-blur-lg"
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <motion.div whileHover="hover" variants={linkVariants}>
-            <Link to="/categories" className="block px-3 py-2 text-white hover:text-orange-300 drop-shadow-md">
-              Categories
-            </Link>
-          </motion.div>
-          <motion.div whileHover="hover" variants={linkVariants}>
-            <Link to="/deals" className="block px-3 py-2 text-white hover:text-orange-300 drop-shadow-md">
-              Deals
-            </Link>
-          </motion.div>
-          <motion.div whileHover="hover" variants={linkVariants}>
-            <Link to="/cart" className="block px-3 py-2 text-white hover:text-orange-300 drop-shadow-md">
-              Cart
-            </Link>
-          </motion.div>
-          <motion.div whileHover="hover" variants={linkVariants}>
-            <Link to="/auth/login" className="block px-3 py-2 text-white hover:text-orange-300 drop-shadow-md">
-              Login
-            </Link>
-          </motion.div>
-          <motion.div whileHover="hover" variants={linkVariants}>
-            <Link to="/auth/register" className="block px-3 py-2 text-white hover:text-orange-300 drop-shadow-md">
-              Sign Up
-            </Link>
-          </motion.div>
-        </div>
-      </motion.div>
+      {/* Mobile Menu Component */}
+      <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
     </motion.header>
   );
 };
