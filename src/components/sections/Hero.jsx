@@ -61,7 +61,7 @@ const Hero = () => {
               className="inline-block"
             >
               <motion.span
-                variants={hoverVariants}
+                // variants={hoverVariants}
                 className="inline-flex items-center rounded-full px-4 py-1 text-xs font-medium bg-orange-400/20 text-orange-800 ring-1 ring-orange-400/30 shadow-sm mb-6"
               >
                 🌟 New Collection Available
