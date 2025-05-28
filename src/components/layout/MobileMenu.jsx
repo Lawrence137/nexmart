@@ -9,30 +9,40 @@ const mobileMenuVariants = {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-      type: 'spring',
-      stiffness: 80,
-      damping: 15,
+      duration: 0.3, // Reduced duration for quicker response
+      ease: [0.4, 0, 0.2, 1], // Custom cubic-bezier for smoother feel
+      type: 'tween', // Switched to tween for better mobile performance
     },
   },
-  exit: { opacity: 0, x: '-100%', transition: { duration: 0.3 } },
+  exit: {
+    opacity: 0,
+    x: '-100%',
+    transition: {
+      duration: 0.25, // Slightly faster exit
+      ease: [0.4, 0, 0.2, 1],
+      type: 'tween',
+    },
+  },
 };
 
 // Animation for links (hover, tap, and staggered entrance)
 const linkVariants = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: 10 }, // Reduced y distance for less computation
   animate: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.4, ease: 'easeOut' },
+    transition: {
+      delay: i * 0.1, // Slightly reduced delay for faster staggered effect
+      duration: 0.3,
+      ease: 'easeOut',
+    },
   }),
   hover: {
-    scale: 1.05,
-    boxShadow: '0px 8px 24px rgba(255, 147, 102, 0.3)',
-    transition: { duration: 0.3, ease: 'easeOut' },
+    scale: 1.03, // Reduced scale for less GPU strain
+    boxShadow: '0px 4px 12px rgba(255, 147, 102, 0.2)', // Reduced shadow size
+    transition: { duration: 0.25, ease: 'easeOut' },
   },
-  tap: { scale: 0.95, boxShadow: '0px 4px 12px rgba(255, 147, 102, 0.2)' },
+  tap: { scale: 0.97, boxShadow: '0px 2px 6px rgba(255, 147, 102, 0.1)' },
 };
 
 // Backdrop animation
@@ -40,7 +50,7 @@ const backdropVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.3 },
+  transition: { duration: 0.25, ease: 'easeOut' }, // Faster and simpler
 };
 
 const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -74,7 +84,7 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 will-change-opacity"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
@@ -85,7 +95,7 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
         initial="hidden"
         animate={isMenuOpen ? 'visible' : 'hidden'}
         exit="exit"
-        className="md:hidden fixed top-0 left-0 w-3/4 h-screen bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl z-50 rounded-r-2xl overflow-hidden"
+        className="md:hidden fixed top-0 left-0 w-3/4 h-screen bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl z-50 rounded-r-2xl overflow-hidden will-change-transform"
       >
         <div className="px-4 pt-4 pb-6 space-y-4 sm:px-6 h-full flex flex-col relative">
           {/* Subtle gradient overlay for depth */}
@@ -134,18 +144,17 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
                 >
                   <span className="relative">
                     {label}
-                    {/* Underline effect on hover */}
                     <motion.span
                       className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-400/70 opacity-0 group-hover:opacity-100"
                       initial={{ scaleX: 0 }}
                       whileHover={{ scaleX: 1, opacity: 1 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
                     />
                   </span>
                   <motion.span
                     className="text-orange-400 opacity-0 group-hover:opacity-100"
                     whileHover={{ x: 8, rotate: 45 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.25 }}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
