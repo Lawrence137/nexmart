@@ -38,7 +38,7 @@ const buttonVariants = {
   tap: { scale: 0.97 },
 };
 
-const SignUpForm = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -173,7 +173,7 @@ const SignUpForm = () => {
           className="text-center text-sm text-gray-600 mt-6"
         >
           Already have an account?{' '}
-          <Link to="/auth/login" className="text-orange-400 hover:text-orange-500 font-medium transition-colors">
+          <Link to="/login" className="text-orange-400 hover:text-orange-500 font-medium transition-colors">
             Log In
           </Link>
         </motion.p>
@@ -182,4 +182,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignUp;
