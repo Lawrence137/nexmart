@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Header from './components/layout/Header'; // Make sure your Header component path is correct
 import MobileMenu from './components/layout/MobileMenu'; // Make sure your MobileMenu component path is correct
 import './App.css';
+import SignUp from './pages/Auth/SignUp';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to control mobile menu visibility
@@ -22,6 +23,7 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
             {/* Add more routes as you create them */}
           </Routes>
         </main>
