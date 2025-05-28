@@ -1,42 +1,67 @@
-import React, { useState } from 'react'; // Import useState
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Home from './pages/Home';
-import Header from './components/layout/Header'; // Make sure your Header component path is correct
-import MobileMenu from './components/layout/MobileMenu'; // Make sure your MobileMenu component path is correct
-import './App.css';
+import Header from './components/layout/Header';
+import MobileMenu from './components/layout/MobileMenu';
 import SignUp from './pages/Auth/SignUp';
 import Login from './pages/Auth/Login';
+import './App.css';
+
+// A wrapper component to protect routes and redirect logged-in users
+const ProtectedAuthRoute = ({ children }) => {
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  // Redirect logged-in users away from auth pages
+  if (currentUser) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to control mobile menu visibility
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <Router>
-      <div className="relative min-h-screen flex flex-col">
-        {/*
-          Render Header and MobileMenu outside of <Routes>
-          so they are present on all pages.
-          Pass the isMenuOpen state and setIsMenuOpen function as props.
-        */}
-        <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+    <AuthProvider>
+      <Router>
+        <div className="relative min-h-screen flex flex-col">
+          {/* Header and MobileMenu are present on all pages */}
+          <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
-        {/* This div will contain your page-specific content */}
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            {/* Add more routes as you create them */}
-          </Routes>
-        </main>
+          {/* Main content */}
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/signup"
+                element={
+                  <ProtectedAuthRoute>
+                    <SignUp />
+                  </ProtectedAuthRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <ProtectedAuthRoute>
+                    <Login />
+                  </ProtectedAuthRoute>
+                }
+              />
+              {/* Add more routes as needed */}
+            </Routes>
+          </main>
 
-        {/*
-          MobileMenu is rendered here, outside the main content flow,
-          to ensure its blur overlay can cover the entire viewport (including the header).
-        */}
-        <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      </div>
-    </Router>
+          <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
