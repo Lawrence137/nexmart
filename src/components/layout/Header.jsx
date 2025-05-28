@@ -122,13 +122,13 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={linkVariants}>
-              <Link to="/auth/login" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
+              <Link to="/login" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
                 Login
               </Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }}>
               <Link
-                to="/auth/register"
+                to="/signup"
                 className="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-4 py-2 rounded-full hover:from-orange-600 hover:to-rose-600 shadow-md transition-all duration-300"
               >
                 Sign Up
