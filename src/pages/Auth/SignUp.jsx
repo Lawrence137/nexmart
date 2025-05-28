@@ -58,7 +58,7 @@ const SignUp = () => {
       // Create user with Firebase
       await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       // Redirect to login page after successful sign-up
-      navigate('/auth/login');
+      navigate('/login');
     } catch (err) {
       setError(err.message || 'Failed to create an account');
     } finally {
@@ -176,7 +176,7 @@ const SignUp = () => {
           className="text-center text-sm text-gray-600 mt-6"
         >
           Already have an account?{' '}
-          <Link to="/auth/login" className="text-orange-400 hover:text-orange-500 font-medium transition-colors">
+          <Link to="/login" className="text-orange-400 hover:text-orange-500 font-medium transition-colors">
             Log In
           </Link>
         </motion.p>
