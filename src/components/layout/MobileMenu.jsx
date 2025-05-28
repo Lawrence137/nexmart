@@ -19,18 +19,20 @@ const mobileMenuVariants = {
   exit: { opacity: 0, x: '-100%', transition: { duration: 0.3 } },
 };
 
-// Animation for links (hover and staggered entrance)
+// Animation for links (hover, tap, and staggered entrance)
 const linkVariants = {
-  initial: { opacity: 0, x: -20 },
+  initial: { opacity: 0, y: 20 },
   animate: (i) => ({
     opacity: 1,
-    x: 0,
-    transition: { delay: i * 0.1, duration: 0.3, ease: 'easeOut' },
+    y: 0,
+    transition: { delay: i * 0.15, duration: 0.4, ease: 'easeOut' },
   }),
   hover: {
-    x: 10,
+    scale: 1.05,
+    boxShadow: '0px 8px 24px rgba(255, 147, 102, 0.3)',
     transition: { duration: 0.3, ease: 'easeOut' },
   },
+  tap: { scale: 0.95, boxShadow: '0px 4px 12px rgba(255, 147, 102, 0.2)' },
 };
 
 // Backdrop animation
@@ -112,6 +114,7 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
                 initial="initial"
                 animate="animate"
                 whileHover="hover"
+                whileTap="tap"
                 variants={linkVariants}
               >
                 <Link
@@ -126,10 +129,28 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
                       ? '/auth/login'
                       : '/auth/register'
                   }
-                  className="block px-5 py-3 text-lg font-medium text-gray-800 hover:text-orange-400 hover:bg-white/20 rounded-xl drop-shadow-sm transition-all duration-300"
+                  className="block px-5 py-3 text-lg font-medium text-gray-800 bg-gradient-to-r from-white/20 to-orange-100/20 hover:from-orange-200/40 hover:to-rose-200/40 rounded-xl shadow-md border border-white/30 hover:border-orange-300/50 transition-all duration-300 flex items-center justify-between group"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {label}
+                  <span className="relative">
+                    {label}
+                    {/* Underline effect on hover */}
+                    <motion.span
+                      className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-400/70 opacity-0 group-hover:opacity-100"
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1, opacity: 1 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                    />
+                  </span>
+                  <motion.span
+                    className="text-orange-400 opacity-0 group-hover:opacity-100"
+                    whileHover={{ x: 8, rotate: 45 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </motion.span>
                 </Link>
               </motion.div>
             ))}
