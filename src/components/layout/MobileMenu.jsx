@@ -136,7 +136,7 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
                       : label === 'Cart'
                       ? '/cart'
                       : label === 'Login'
-                      ? '/auth/login'
+                      ? '/login'
                       : '/signup'
                   }
                   className="block px-5 py-3 text-lg font-medium text-gray-800 bg-gradient-to-r from-white/20 to-orange-100/20 hover:from-orange-200/40 hover:to-rose-200/40 rounded-xl shadow-md border border-white/30 hover:border-orange-300/50 transition-all duration-300 flex items-center justify-between group"

@@ -5,6 +5,7 @@ import Header from './components/layout/Header'; // Make sure your Header compon
 import MobileMenu from './components/layout/MobileMenu'; // Make sure your MobileMenu component path is correct
 import './App.css';
 import SignUp from './pages/Auth/SignUp';
+import Login from './pages/Auth/Login';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to control mobile menu visibility
@@ -24,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
             {/* Add more routes as you create them */}
           </Routes>
         </main>

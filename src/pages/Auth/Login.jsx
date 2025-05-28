@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 // Animation for form container fade-in and slight scale
 const formContainerVariants = {
@@ -39,12 +39,10 @@ const buttonVariants = {
   tap: { scale: 0.95, boxShadow: '0px 4px 12px rgba(255, 147, 102, 0.2)' },
 };
 
-const SignUp = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const handleChange = (e) => {
@@ -54,7 +52,8 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    // Add your login logic here (e.g., API call)
+    console.log('Login submitted:', formData);
   };
 
   return (
@@ -83,7 +82,7 @@ const SignUp = () => {
           transition={{ duration: 0.4, delay: 0.2 }}
           className="text-3xl font-bold text-gray-800 text-center mb-6 relative"
         >
-          Sign Up
+          Log In
           <motion.span
             className="absolute left-1/2 bottom-0 h-1 w-16 bg-gradient-to-r from-orange-400 to-rose-400 rounded-full -translate-x-1/2"
             initial={{ scaleX: 0 }}
@@ -94,25 +93,8 @@ const SignUp = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Username Field */}
-          <motion.div custom={0} variants={fieldVariants} initial="initial" animate="animate">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 focus:border-orange-400/90 hover:bg-white/20 transition-all duration-300"
-              placeholder="Enter your username"
-            />
-          </motion.div>
-
           {/* Email Field */}
-          <motion.div custom={1} variants={fieldVariants} initial="initial" animate="animate">
+          <motion.div custom={0} variants={fieldVariants} initial="initial" animate="animate">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               Email
             </label>
@@ -129,7 +111,7 @@ const SignUp = () => {
           </motion.div>
 
           {/* Password Field */}
-          <motion.div custom={2} variants={fieldVariants} initial="initial" animate="animate">
+          <motion.div custom={1} variants={fieldVariants} initial="initial" animate="animate">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
@@ -145,23 +127,6 @@ const SignUp = () => {
             />
           </motion.div>
 
-          {/* Confirm Password Field */}
-          <motion.div custom={3} variants={fieldVariants} initial="initial" animate="animate">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 focus:border-orange-400/90 hover:bg-white/20 transition-all duration-300"
-              placeholder="Confirm your password"
-            />
-          </motion.div>
-
           {/* Submit Button */}
           <motion.button
             type="submit"
@@ -170,7 +135,7 @@ const SignUp = () => {
             whileTap="tap"
             className="w-full py-3 mt-4 bg-gradient-to-r from-orange-400 to-rose-400 text-white font-medium rounded-xl shadow-lg hover:from-orange-500 hover:to-rose-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 transition-all duration-300 relative overflow-hidden"
           >
-            <span className="relative z-10">Sign Up</span>
+            <span className="relative z-10">Log In</span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-orange-300/50 to-rose-300/50 opacity-0 hover:opacity-100"
               transition={{ duration: 0.3 }}
@@ -178,16 +143,16 @@ const SignUp = () => {
           </motion.button>
         </form>
 
-        {/* Link to Login */}
+        {/* Link to Sign Up */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
           className="text-center text-sm text-gray-600 mt-6"
         >
-          Already have an account?{' '}
-          <Link to="/login" className="text-orange-400 hover:text-orange-500 font-medium transition-colors">
-            Log In
+          Don’t have an account?{' '}
+          <Link to="/signup" className="text-orange-400 hover:text-orange-500 font-medium transition-colors">
+            Sign Up
           </Link>
         </motion.p>
       </div>
@@ -195,4 +160,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
