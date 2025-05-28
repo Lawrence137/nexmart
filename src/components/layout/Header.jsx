@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-// import MobileMenu from './MobileMenu'; // REMOVE THIS IMPORT
+import { useAuth } from '../../context/AuthContext'; // Import useAuth to access auth state
 
 // Animation for header entrance
 const headerVariants = {
@@ -39,16 +39,21 @@ const bottomLineVariants = {
 
 // Accept isMenuOpen and setIsMenuOpen as props
 const Header = ({ isMenuOpen, setIsMenuOpen }) => {
-  // No need for local state for isMenuOpen here anymore, it's controlled by parent
-  // const [isMenuOpen, setIsMenuOpen] = useState(false); // REMOVE THIS LINE
+  const { currentUser, logout } = useAuth(); // Access currentUser and logout from AuthContext
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
 
   return (
     <motion.header
       variants={headerVariants}
       initial="hidden"
       animate="visible"
-      // Keep z-index at z-30 or z-40, it will now be behind the overlay
-      // The key is that the overlay is rendered outside this component's direct parent.
       className="sticky top-0 z-30 bg-gradient-to-r from-amber-50/80 via-orange-100/80 to-rose-200/80 backdrop-blur-lg shadow-lg"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -121,19 +126,34 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
                 </motion.div>
               </Link>
             </motion.div>
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link to="/login" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
-                Login
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }}>
-              <Link
-                to="/signup"
-                className="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-4 py-2 rounded-full hover:from-orange-600 hover:to-rose-600 shadow-md transition-all duration-300"
-              >
-                Sign Up
-              </Link>
-            </motion.div>
+
+            {/* Conditionally render Login/Sign Up or Logout */}
+            {currentUser ? (
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-4 py-2 rounded-full hover:from-orange-600 hover:to-rose-600 shadow-md transition-all duration-300"
+                >
+                  Log Out
+                </button>
+              </motion.div>
+            ) : (
+              <>
+                <motion.div whileHover="hover" variants={linkVariants}>
+                  <Link to="/login" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
+                    Login
+                  </Link>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }}>
+                  <Link
+                    to="/signup"
+                    className="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-4 py-2 rounded-full hover:from-orange-600 hover:to-rose-600 shadow-md transition-all duration-300"
+                  >
+                    Sign Up
+                  </Link>
+                </motion.div>
+              </>
+            )}
           </nav>
 
           {/* Mobile menu button */}
@@ -177,9 +197,6 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
         </div>
       </div>
-
-      {/* REMOVE MobileMenu component from here */}
-      {/* <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} /> */}
     </motion.header>
   );
 };
