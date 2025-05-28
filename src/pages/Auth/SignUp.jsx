@@ -33,7 +33,7 @@ const fieldVariants = {
 const buttonVariants = {
   hover: {
     scale: 1.05,
-    boxShadow: '0px 8px 24px rgba(255, 147, 102, 0.3)',
+    boxShadow: '0px 8px 24px rgba(255, 147, 102, 0.4)',
     transition: { duration: 0.3, ease: 'easeOut' },
   },
   tap: { scale: 0.95, boxShadow: '0px 4px 12px rgba(255, 147, 102, 0.2)' },
@@ -54,7 +54,6 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here (e.g., API call)
     console.log('Form submitted:', formData);
   };
 
@@ -63,27 +62,41 @@ const SignUp = () => {
       variants={formContainerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-rose-50 p-4"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-200 via-rose-200 to-purple-200 p-4 relative overflow-hidden"
     >
-      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-6 sm:p-8">
-        {/* Subtle gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-100/10 to-rose-100/10 pointer-events-none rounded-2xl" />
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-orange-300/20 rounded-full blur-3xl -translate-x-1/4 -translate-y-1/4" />
+        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-rose-300/20 rounded-full blur-3xl translate-x-1/4 translate-y-1/4" />
+      </div>
+
+      <div className="relative w-full max-w-md bg-white/5 backdrop-blur-2xl border border-white/30 shadow-xl rounded-3xl p-6 sm:p-8">
+        {/* Gradient Overlay for Depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-100/20 to-rose-200/20 rounded-3xl pointer-events-none" />
+        {/* Inner Glow Effect */}
+        <div className="absolute inset-0 rounded-3xl shadow-inner shadow-orange-300/20 pointer-events-none" />
 
         {/* Form Header */}
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="text-3xl font-semibold text-gray-800 text-center mb-6"
+          className="text-3xl font-bold text-gray-800 text-center mb-6 relative"
         >
           Sign Up
+          <motion.span
+            className="absolute left-1/2 bottom-0 h-1 w-16 bg-gradient-to-r from-orange-400 to-rose-400 rounded-full -translate-x-1/2"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          />
         </motion.h2>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Username Field */}
           <motion.div custom={0} variants={fieldVariants} initial="initial" animate="animate">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
               Username
             </label>
             <input
@@ -93,14 +106,14 @@ const SignUp = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/70 transition-all duration-300"
+              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 focus:border-orange-400/90 hover:bg-white/20 transition-all duration-300"
               placeholder="Enter your username"
             />
           </motion.div>
 
           {/* Email Field */}
           <motion.div custom={1} variants={fieldVariants} initial="initial" animate="animate">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               Email
             </label>
             <input
@@ -110,14 +123,14 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/70 transition-all duration-300"
+              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 focus:border-orange-400/90 hover:bg-white/20 transition-all duration-300"
               placeholder="Enter your email"
             />
           </motion.div>
 
           {/* Password Field */}
           <motion.div custom={2} variants={fieldVariants} initial="initial" animate="animate">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
             <input
@@ -127,14 +140,14 @@ const SignUp = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/70 transition-all duration-300"
+              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 focus:border-orange-400/90 hover:bg-white/20 transition-all duration-300"
               placeholder="Enter your password"
             />
           </motion.div>
 
           {/* Confirm Password Field */}
           <motion.div custom={3} variants={fieldVariants} initial="initial" animate="animate">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
               Confirm Password
             </label>
             <input
@@ -144,7 +157,7 @@ const SignUp = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/70 transition-all duration-300"
+              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 focus:border-orange-400/90 hover:bg-white/20 transition-all duration-300"
               placeholder="Confirm your password"
             />
           </motion.div>
@@ -155,9 +168,13 @@ const SignUp = () => {
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
-            className="w-full py-3 mt-4 bg-gradient-to-r from-orange-400 to-rose-400 text-white font-medium rounded-xl shadow-md hover:from-orange-500 hover:to-rose-500 focus:outline-none focus:ring-2 focus:ring-orange-400/50 transition-all duration-300"
+            className="w-full py-3 mt-4 bg-gradient-to-r from-orange-400 to-rose-400 text-white font-medium rounded-xl shadow-lg hover:from-orange-500 hover:to-rose-500 focus:outline-none focus:ring-2 focus:ring-orange-400/70 transition-all duration-300 relative overflow-hidden"
           >
-            Sign Up
+            <span className="relative z-10">Sign Up</span>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-orange-300/50 to-rose-300/50 opacity-0 hover:opacity-100"
+              transition={{ duration: 0.3 }}
+            />
           </motion.button>
         </form>
 
