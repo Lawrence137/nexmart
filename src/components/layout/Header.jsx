@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import MobileMenu from './MobileMenu';
+// import MobileMenu from './MobileMenu'; // REMOVE THIS IMPORT
 
 // Animation for header entrance
 const headerVariants = {
@@ -37,15 +37,19 @@ const bottomLineVariants = {
   open: { rotate: -45, y: -6 },
 };
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+// Accept isMenuOpen and setIsMenuOpen as props
+const Header = ({ isMenuOpen, setIsMenuOpen }) => {
+  // No need for local state for isMenuOpen here anymore, it's controlled by parent
+  // const [isMenuOpen, setIsMenuOpen] = useState(false); // REMOVE THIS LINE
 
   return (
     <motion.header
       variants={headerVariants}
       initial="hidden"
       animate="visible"
-      className="sticky top-0 z-50 bg-gradient-to-r from-amber-50/80 via-orange-100/80 to-rose-200/80 backdrop-blur-lg shadow-lg"
+      // Keep z-index at z-30 or z-40, it will now be behind the overlay
+      // The key is that the overlay is rendered outside this component's direct parent.
+      className="sticky top-0 z-30 bg-gradient-to-r from-amber-50/80 via-orange-100/80 to-rose-200/80 backdrop-blur-lg shadow-lg"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -136,7 +140,7 @@ const Header = () => {
           <div className="md:hidden">
             <motion.button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-blue-900 hover:text-orange-300" // Changed to a contrasting navy color
+              className="text-blue-900 hover:text-orange-300"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -174,8 +178,8 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Component */}
-      <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      {/* REMOVE MobileMenu component from here */}
+      {/* <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} /> */}
     </motion.header>
   );
 };
