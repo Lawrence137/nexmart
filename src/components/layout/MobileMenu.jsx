@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRef, useEffect } from 'react';
 
+// Animation for mobile menu slide-in from the left
 const mobileMenuVariants = {
   hidden: { opacity: 0, x: '-100%' },
   visible: {
@@ -15,13 +16,29 @@ const mobileMenuVariants = {
       damping: 15,
     },
   },
+  exit: { opacity: 0, x: '-100%', transition: { duration: 0.3 } },
 };
 
+// Animation for links (hover and staggered entrance)
 const linkVariants = {
+  initial: { opacity: 0, x: -20 },
+  animate: (i) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.1, duration: 0.3, ease: 'easeOut' },
+  }),
   hover: {
     x: 10,
     transition: { duration: 0.3, ease: 'easeOut' },
   },
+};
+
+// Backdrop animation
+const backdropVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.3 },
 };
 
 const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -51,11 +68,11 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
     <>
       {isMenuOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+          variants={backdropVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
@@ -65,19 +82,20 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
         variants={mobileMenuVariants}
         initial="hidden"
         animate={isMenuOpen ? 'visible' : 'hidden'}
-        // ADDED 'rounded-xl' and slightly adjusted border to 'border' instead of 'border-r'
-        className="md:hidden fixed top-0 left-0 w-3/4 h-screen
-                   bg-gradient-to-r from-amber-50/90 via-orange-100/90 to-rose-200/90
-                   backdrop-blur-lg border border-orange-200/50 shadow-lg z-50 rounded-xl" // Added rounded-xl
+        exit="exit"
+        className="md:hidden fixed top-0 left-0 w-3/4 h-screen bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl z-50 rounded-r-2xl overflow-hidden"
       >
-        <div className="px-4 pt-4 pb-6 space-y-2 sm:px-6 h-full flex flex-col">
+        <div className="px-4 pt-4 pb-6 space-y-4 sm:px-6 h-full flex flex-col relative">
+          {/* Subtle gradient overlay for depth */}
+          <div className="absolute inset-0 bg-gradient-to-b from-orange-100/10 to-rose-100/10 pointer-events-none" />
+
           {/* Close Button */}
           <div className="flex justify-end">
             <motion.button
               onClick={() => setIsMenuOpen(false)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-orange-500 hover:text-orange-600 focus:outline-none"
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              className="p-2 rounded-full bg-white/20 text-orange-400 hover:bg-orange-200/30 hover:text-orange-500 focus:outline-none transition-colors duration-300"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -86,53 +104,39 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
 
           {/* Menu Links */}
-          <div className="flex-1 space-y-2">
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link
-                to="/categories"
-                className="block px-4 py-2 hover:text-orange-300 hover:bg-orange-100/20 rounded-lg drop-shadow-md transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+          <div className="flex-1 space-y-3">
+            {['Categories', 'Deals', 'Cart', 'Login', 'Sign Up'].map((label, index) => (
+              <motion.div
+                key={label}
+                custom={index}
+                initial="initial"
+                animate="animate"
+                whileHover="hover"
+                variants={linkVariants}
               >
-                Categories
-              </Link>
-            </motion.div>
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link
-                to="/deals"
-                className="block px-4 py-2 hover:text-orange-300 hover:bg-orange-100/20 rounded-lg drop-shadow-md transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Deals
-              </Link>
-            </motion.div>
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link
-                to="/cart"
-                className="block px-4 py-2 hover:text-orange-300 hover:bg-orange-100/20 rounded-lg drop-shadow-md transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Cart
-              </Link>
-            </motion.div>
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link
-                to="/auth/login"
-                className="block px-4 py-2 hover:text-orange-300 hover:bg-orange-100/20 rounded-lg drop-shadow-md transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
-            </motion.div>
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link
-                to="/auth/register"
-                className="block px-4 py-2 hover:text-orange-300 hover:bg-orange-100/20 rounded-lg drop-shadow-md transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign Up
-              </Link>
-            </motion.div>
+                <Link
+                  to={
+                    label === 'Categories'
+                      ? '/categories'
+                      : label === 'Deals'
+                      ? '/deals'
+                      : label === 'Cart'
+                      ? '/cart'
+                      : label === 'Login'
+                      ? '/auth/login'
+                      : '/auth/register'
+                  }
+                  className="block px-5 py-3 text-lg font-medium text-gray-800 hover:text-orange-400 hover:bg-white/20 rounded-xl drop-shadow-sm transition-all duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {label}
+                </Link>
+              </motion.div>
+            ))}
           </div>
+
+          {/* Decorative Gradient at Bottom */}
+          <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-orange-200/20 to-transparent pointer-events-none" />
         </div>
       </motion.div>
     </>
