@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext'; // Import useAuth to access auth state
+import { useAuth } from '../../context/AuthContext';
 
 // Animation for header entrance
 const headerVariants = {
@@ -18,6 +18,32 @@ const linkVariants = {
   hover: {
     y: -2,
     transition: { duration: 0.3, ease: 'easeOut' },
+  },
+};
+
+// Dropdown animation
+const dropdownVariants = {
+  hidden: { opacity: 0, y: -10, height: 0 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    height: 'auto',
+    transition: { duration: 0.3, ease: 'easeOut', staggerChildren: 0.05 },
+  },
+};
+
+// Dropdown item animation
+const dropdownItemVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  hover: {
+    x: 5,
+    color: '#fb923c', // Orange-400
+    transition: { duration: 0.2 },
   },
 };
 
@@ -39,7 +65,8 @@ const bottomLineVariants = {
 
 // Accept isMenuOpen and setIsMenuOpen as props
 const Header = ({ isMenuOpen, setIsMenuOpen }) => {
-  const { currentUser, logout } = useAuth(); // Access currentUser and logout from AuthContext
+  const { currentUser, logout } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -48,6 +75,20 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
       console.error('Logout failed:', err);
     }
   };
+
+  // Categories list (same as before)
+  const categories = [
+    { name: 'Electronics', path: '/categories/electronics' },
+    { name: 'Fashion', path: '/categories/fashion' },
+    { name: 'Home & Living', path: '/categories/home-living' },
+    { name: 'Beauty', path: '/categories/beauty' },
+    { name: 'Sports & Outdoors', path: '/categories/sports-outdoors' },
+    { name: 'Groceries', path: '/categories/groceries' },
+    { name: 'Toys & Games', path: '/categories/toys-games' },
+    { name: 'Health & Wellness', path: '/categories/health-wellness' },
+    { name: 'Books & Stationery', path: '/categories/books-stationery' },
+    { name: 'Automotive', path: '/categories/automotive' },
+  ];
 
   return (
     <motion.header
@@ -96,11 +137,52 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <motion.div whileHover="hover" variants={linkVariants}>
-              <Link to="/categories" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
-                Categories
-              </Link>
-            </motion.div>
+            {/* Categories Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setIsDropdownOpen(true)}
+              onMouseLeave={() => setIsDropdownOpen(false)}
+            >
+              <motion.div whileHover="hover" variants={linkVariants}>
+                <button className="text-white hover:text-orange-300 drop-shadow-md transition-colors flex items-center">
+                  Categories
+                  <motion.span
+                    animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="ml-1"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </motion.span>
+                </button>
+              </motion.div>
+
+              {/* Dropdown Menu */}
+              <motion.div
+                variants={dropdownVariants}
+                initial="hidden"
+                animate={isDropdownOpen ? 'visible' : 'hidden'}
+                className="absolute top-full left-0 mt-2 w-56 bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl rounded-xl p-4 z-50"
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-orange-100/10 to-rose-200/10 rounded-xl pointer-events-none" />
+                <ul className="space-y-2">
+                  {categories.map((category) => (
+                    <motion.li
+                      key={category.name}
+                      variants={dropdownItemVariants}
+                      whileHover="hover"
+                      className="text-gray-700 hover:text-orange-400"
+                    >
+                      <Link to={category.path} className="block text-sm font-medium">
+                        {category.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            </div>
+
             <motion.div whileHover="hover" variants={linkVariants}>
               <Link to="/deals" className="text-white hover:text-orange-300 drop-shadow-md transition-colors">
                 Deals
