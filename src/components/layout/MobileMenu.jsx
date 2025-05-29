@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 // Animation for mobile menu
@@ -8,6 +8,31 @@ const mobileMenuVariants = {
   hidden: { opacity: 0, x: '-100%' },
   visible: { x: 0, opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1], type: 'tween' } },
   exit: { opacity: 0, x: '-100%', transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1], type: 'tween' } },
+};
+
+// Animation for category items
+const categoryItemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  hover: {
+    x: 5,
+    color: '#fb923c', // Orange-400
+    transition: { duration: 0.2 },
+  },
+};
+
+// Animation for category dropdown
+const categoryDropdownVariants = {
+  hidden: { opacity: 0, height: 0 },
+  visible: {
+    opacity: 1,
+    height: 'auto',
+    transition: { duration: 0.3, ease: 'easeOut', staggerChildren: 0.05 },
+  },
 };
 
 const linkVariants = {
@@ -31,6 +56,21 @@ const backdropVariants = {
 const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
   const menuRef = useRef(null);
   const { currentUser, logout } = useAuth();
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+
+  // Categories list (same as in Header)
+  const categories = [
+    { name: 'Electronics', path: '/categories/electronics' },
+    { name: 'Fashion', path: '/categories/fashion' },
+    { name: 'Home & Living', path: '/categories/home-living' },
+    { name: 'Beauty', path: '/categories/beauty' },
+    { name: 'Sports & Outdoors', path: '/categories/sports-outdoors' },
+    { name: 'Groceries', path: '/categories/groceries' },
+    { name: 'Toys & Games', path: '/categories/toys-games' },
+    { name: 'Health & Wellness', path: '/categories/health-wellness' },
+    { name: 'Books & Stationery', path: '/categories/books-stationery' },
+    { name: 'Automotive', path: '/categories/automotive' },
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -58,7 +98,6 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
   };
 
   const links = [
-    { label: 'Categories', to: '/categories' },
     { label: 'Deals', to: '/deals' },
     { label: 'Cart', to: '/cart' },
     ...(currentUser
@@ -107,10 +146,70 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
 
           <div className="flex-1 space-y-3">
+            {/* Categories Collapsible Section */}
+            <motion.div
+              custom={0}
+              initial="initial"
+              animate="animate"
+              whileHover="hover"
+              whileTap="tap"
+              variants={linkVariants}
+            >
+              <button
+                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                className="w-full px-5 py-3 text-lg font-medium text-gray-800 bg-gradient-to-r from-white/20 to-orange-100/20 hover:from-orange-200/40 hover:to-rose-200/40 rounded-xl shadow-md border border-white/30 hover:border-orange-300/50 transition-all duration-300 flex items-center justify-between group"
+              >
+                <span className="relative">
+                  Categories
+                  <motion.span
+                    className="absolute left-0 bottom-0 w-full h-0.5 bg-orange-400/70 opacity-0 group-hover:opacity-100"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1, opacity: 1 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  />
+                </span>
+                <motion.span
+                  animate={{ rotate: isCategoriesOpen ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-orange-400 opacity-0 group-hover:opacity-100"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </motion.span>
+              </button>
+
+              {/* Categories List */}
+              <motion.div
+                variants={categoryDropdownVariants}
+                initial="hidden"
+                animate={isCategoriesOpen ? 'visible' : 'hidden'}
+                className="pl-5 pt-2 space-y-2"
+              >
+                {categories.map((category) => (
+                  <motion.div
+                    key={category.name}
+                    variants={categoryItemVariants}
+                    whileHover="hover"
+                    className="text-gray-700 hover:text-orange-400"
+                  >
+                    <Link
+                      to={category.path}
+                      className="block text-sm font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* Other Links */}
             {links.map((link, index) => (
               <motion.div
                 key={link.label}
-                custom={index}
+                custom={index + 1} // Offset index for animation delay
                 initial="initial"
                 animate="animate"
                 whileHover="hover"
